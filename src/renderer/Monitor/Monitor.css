@@ -1,0 +1,9 @@
+.monitor {
+	background-color: gainsboro;
+	border: solid 1px blue;
+	margin: 1em;
+	width: 300px;
+	height: 300px;
+	text-overflow: wrap;
+	display: inline-block;
+}

@@ -27,5 +27,31 @@
  */
 
 import './index.css';
+import React, { FunctionComponent } from 'react';
+import ReactDOM from 'react-dom';
+import { Monitor, TMonitor } from './Monitor/Monitor'
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+const App: FunctionComponent = () => {
+	// to be retrieved from native API I haven't written
+	const FakeMonitorData: TMonitor[] = [
+		{
+			deviceId: "External Display",
+			width: 1920,
+			height: 1080,
+			scaleFactor: 1
+		},
+		{
+			deviceId: "Macbook 13.5",
+			width: 2560,
+			height: 1600,
+			scaleFactor: 1
+		}
+	]
+	return (
+		<div>
+			{FakeMonitorData.map(monitorProps => (<Monitor {...monitorProps}/>))}
+		</div>
+	)
+}
+
+ReactDOM.render(<App/>, document.getElementById("app"))
