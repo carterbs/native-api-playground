@@ -1,58 +1,52 @@
+// Napi::Function Native::GetClass(Napi::Env env) {
+//     return DefineClass(env, "Native", {
+//         Native::InstanceMethod("greet", &Native::Greet),
+//     });
+// }
+
+// Napi::Object Init(Napi::Env env, Napi::Object exports) {
+//     Napi::String name = Napi::String::New(env, "Native");
+//     exports.Set(name, Native::GetClass(env));
+//     return exports;
+// }
+
 #include "native.h"
 
+//
+//  main.cpp
+//  native-test-api
+//
+//  Created by Bradley Carter on 9/19/20.
+//
+
+#include <iostream>
+#include <ApplicationServices/ApplicationServices.h>
+#include <vector>
+#include <napi.h>
 using namespace Napi;
 
-Native::Native(const Napi::CallbackInfo& info) : ObjectWrap(info) {
+Napi::Array getMonitorInfo(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
-
-    if (info.Length() < 1) {
-        Napi::TypeError::New(env, "Wrong number of arguments")
-          .ThrowAsJavaScriptException();
-        return;
+    CGError cgret;
+    uint32_t num_displays = 0;
+    
+    cgret = CGGetActiveDisplayList(0, NULL, &num_displays);
+    std::vector<CGDirectDisplayID> displays(num_displays);
+    cgret = CGGetActiveDisplayList(num_displays, displays.begin().base(), &num_displays);
+    Napi::Array returnValue = Napi::Array::New(env, num_displays);
+    
+    for(uint32_t d=0; d<num_displays; d++) {
+        CGSize size = CGDisplayScreenSize(displays[d]);
+        returnValue[d] = "{\"deviceId\":\"" + std::to_string(displays[d]) + "\",\"width\":\"" + std::to_string(size.width) + "\",\"height\":\"" + std::to_string(size.height) + "\"}";
     }
-
-    if (!info[0].IsString()) {
-        Napi::TypeError::New(env, "You need to name yourself")
-          .ThrowAsJavaScriptException();
-        return;
-    }
-
-    this->_greeterName = info[0].As<Napi::String>().Utf8Value();
-}
-
-Napi::Value Native::Greet(const Napi::CallbackInfo& info) {
-    Napi::Env env = info.Env();
-
-    if (info.Length() < 1) {
-        Napi::TypeError::New(env, "Wrong number of arguments")
-          .ThrowAsJavaScriptException();
-        return env.Null();
-    }
-
-    if (!info[0].IsString()) {
-        Napi::TypeError::New(env, "You need to introduce yourself to greet")
-          .ThrowAsJavaScriptException();
-        return env.Null();
-    }
-
-    Napi::String name = info[0].As<Napi::String>();
-
-    printf("Hello %s\n", name.Utf8Value().c_str());
-    printf("I am %s\n", this->_greeterName.c_str());
-
-    return Napi::String::New(env, this->_greeterName);
-}
-
-Napi::Function Native::GetClass(Napi::Env env) {
-    return DefineClass(env, "Native", {
-        Native::InstanceMethod("greet", &Native::Greet),
-    });
+    return returnValue;
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
-    Napi::String name = Napi::String::New(env, "Native");
-    exports.Set(name, Native::GetClass(env));
+    exports.Set(Napi::String::New(env, "getMonitorInfo"),
+                Napi::Function::New(env, getMonitorInfo));
     return exports;
 }
+
 
 NODE_API_MODULE(addon, Init)

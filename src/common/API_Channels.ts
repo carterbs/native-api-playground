@@ -1,3 +1,0 @@
-export enum API_CHANNELS {
-	"REQUEST_SET_SHAPE" = "REQUEST_SET_SHAPE"
-}
