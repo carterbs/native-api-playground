@@ -1,7 +1,7 @@
 import addon from '../../native/build/Release/native-native.node'
 
 
-class Native {
+export class Native {
     constructor(name) {
         this._addonInstance = new addon.Native(name)
     }
@@ -11,6 +11,3 @@ class Native {
     }
 }
 
-module.exports = { 
-    Native
-}
