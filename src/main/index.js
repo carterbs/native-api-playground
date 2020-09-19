@@ -1,14 +1,11 @@
 import { app, BrowserWindow } from 'electron';
-import { listenForAPIRequests } from './API';
-declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
-declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: any;
-
+const { Native } = require("./nativeBinding")
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
 
-const createWindow = (): void => {
+const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     height: 1000,
@@ -28,7 +25,9 @@ const createWindow = (): void => {
   mainWindow.webContents.openDevTools();
 };
 const start = () => {
-  listenForAPIRequests();
+  console.log(Native);
+  // new Native("shannon").greet("brad");
+  // listenForAPIRequests();
   createWindow();
 }
 // This method will be called when Electron has finished

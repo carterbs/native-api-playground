@@ -1,0 +1,1 @@
+cmd_Release/native-native.node := c++ -bundle -undefined dynamic_lookup -Wl,-no_pie -Wl,-search_paths_first -mmacosx-version-min=10.15.6 -arch x86_64 -L./Release -stdlib=libc++  -o Release/native-native.node Release/obj.target/native-native/src/native.o Release/nothing.a 

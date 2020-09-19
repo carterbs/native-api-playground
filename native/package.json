@@ -1,0 +1,21 @@
+{
+    "main": "lib/binding.js",
+    "dependencies": {
+        "node-addon-api": "^1.1.0"
+    },
+    "scripts": {
+        "pretest": "tsc",
+        "test": "node --napi-modules ./test/test_binding.js"
+    },
+    "gypfile": true,
+    "name": "native",
+    "version": "1.0.0",
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@types/node": "^7.0.22",
+        "node-gyp": "^7.1.0",
+        "typescript": "^3.9.7"
+    }
+}
