@@ -1,29 +1,4 @@
-// Napi::Function Native::GetClass(Napi::Env env) {
-//     return DefineClass(env, "Native", {
-//         Native::InstanceMethod("greet", &Native::Greet),
-//     });
-// }
-
-// Napi::Object Init(Napi::Env env, Napi::Object exports) {
-//     Napi::String name = Napi::String::New(env, "Native");
-//     exports.Set(name, Native::GetClass(env));
-//     return exports;
-// }
-
 #include "native.h"
-
-//
-//  main.cpp
-//  native-test-api
-//
-//  Created by Bradley Carter on 9/19/20.
-//
-
-#include <iostream>
-#include <ApplicationServices/ApplicationServices.h>
-#include <vector>
-#include <napi.h>
-using namespace Napi;
 
 Napi::Array getMonitorInfo(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
@@ -36,8 +11,10 @@ Napi::Array getMonitorInfo(const Napi::CallbackInfo& info) {
     Napi::Array returnValue = Napi::Array::New(env, num_displays);
     
     for(uint32_t d=0; d<num_displays; d++) {
-        CGSize size = CGDisplayScreenSize(displays[d]);
-        returnValue[d] = "{\"deviceId\":\"" + std::to_string(displays[d]) + "\",\"width\":\"" + std::to_string(size.width) + "\",\"height\":\"" + std::to_string(size.height) + "\"}";
+        CGDirectDisplayID displayId = displays[d];
+        size_t width = CGDisplayPixelsWide(displayId);
+        size_t height = CGDisplayPixelsHigh(displayId);
+        returnValue[d] = "{\"deviceId\":\"" + std::to_string(displayId) + "\",\"width\":\"" + std::to_string(width) + "\",\"height\":\"" + std::to_string(height) + "\"}";
     }
     return returnValue;
 }

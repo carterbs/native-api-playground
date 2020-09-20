@@ -27,29 +27,23 @@
  */
 
 import './index.css';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, SetStateAction, Dispatch } from 'react';
 import ReactDOM from 'react-dom';
 import { Monitor, TMonitor } from './Monitor/Monitor'
+const retrieveMonitorInfo = async (setFakeMonitorData:Dispatch<SetStateAction<[]>>) => {
+	const monitorInfo = await (window as any).testAPI.getMonitorInfo();
 
+	setFakeMonitorData(monitorInfo.map(JSON.parse));
+}
 const App: FunctionComponent = () => {
 	// to be retrieved from native API I haven't written
-	const FakeMonitorData: TMonitor[] = [
-		{
-			deviceId: "External Display",
-			width: 1920,
-			height: 1080,
-			scaleFactor: 1
-		},
-		{
-			deviceId: "Macbook 13.5",
-			width: 2560,
-			height: 1600,
-			scaleFactor: 1
-		}
-	]
+	const [fakeMonitorData, setFakeMonitorData] = React.useState([]);
+	React.useEffect(() => {
+		retrieveMonitorInfo(setFakeMonitorData);
+	}, [])
 	return (
 		<div>
-			{FakeMonitorData.map(monitorProps => (<Monitor {...monitorProps}/>))}
+			{fakeMonitorData.map(monitorProps => (<Monitor {...monitorProps}/>))}
 		</div>
 	)
 }
