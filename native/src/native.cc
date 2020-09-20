@@ -14,7 +14,7 @@ Napi::Array getMonitorInfo(const Napi::CallbackInfo& info) {
         CGDirectDisplayID displayId = displays[d];
         size_t width = CGDisplayPixelsWide(displayId);
         size_t height = CGDisplayPixelsHigh(displayId);
-        returnValue[d] = "{\"deviceId\":\"" + std::to_string(displayId) + "\",\"width\":\"" + std::to_string(width) + "\",\"height\":\"" + std::to_string(height) + "\"}";
+        returnValue[d] = "{\"displayId\":\"" + std::to_string(displayId) + "\",\"width\":\"" + std::to_string(width) + "\",\"height\":\"" + std::to_string(height) + "\"}";
     }
     return returnValue;
 }

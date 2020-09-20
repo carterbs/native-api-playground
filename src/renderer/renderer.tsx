@@ -29,7 +29,7 @@
 import './index.css';
 import React, { FunctionComponent, SetStateAction, Dispatch } from 'react';
 import ReactDOM from 'react-dom';
-import { Monitor, TMonitor } from './Monitor/Monitor'
+import { Monitor } from './Monitor/Monitor'
 const retrieveMonitorInfo = async (setFakeMonitorData:Dispatch<SetStateAction<[]>>) => {
 	const monitorInfo = await (window as any).testAPI.getMonitorInfo();
 
@@ -37,13 +37,16 @@ const retrieveMonitorInfo = async (setFakeMonitorData:Dispatch<SetStateAction<[]
 }
 const App: FunctionComponent = () => {
 	// to be retrieved from native API I haven't written
+	const [shouldRetrieveMonitorInfo, setShouldRetrieveMonitorInfo] = React.useState(false);
 	const [fakeMonitorData, setFakeMonitorData] = React.useState([]);
 	React.useEffect(() => {
 		retrieveMonitorInfo(setFakeMonitorData);
-	}, [])
+	}, [shouldRetrieveMonitorInfo]);
+	
 	return (
 		<div>
-			{fakeMonitorData.map(monitorProps => (<Monitor {...monitorProps}/>))}
+			{shouldRetrieveMonitorInfo && fakeMonitorData.map(monitorProps => (<Monitor {...monitorProps}/>))}
+			{!shouldRetrieveMonitorInfo && <div className="info-retriever" onClick={() => setShouldRetrieveMonitorInfo(true)}>Click to retrieve monitor info from native module</div>}
 		</div>
 	)
 }

@@ -10,9 +10,10 @@ const MONITOR_CLASS_NAME = "monitor";
 export const Monitor: FunctionComponent<TMonitor> = (props)=> {
 	return (
 		<div className={MONITOR_CLASS_NAME}>
-			<div className="width">Width: {props.width}</div>
-			<div className="height">Height: {props.height}</div>
-			<div className="display-id">Height: {props.displayId}</div>
+			<div className="resolution">
+				Resolution: {props.width} x {props.height}
+			</div> 
+			<div className="display-id">Display Id: {props.displayId}</div>
 		</div>
 	)
 }

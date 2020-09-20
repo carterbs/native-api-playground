@@ -4,6 +4,8 @@
 	margin: 1em;
 	width: 300px;
 	height: 300px;
-	text-overflow: wrap;
-	display: inline-block;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
